@@ -9,12 +9,7 @@ template<class T>using p_queue = std::priority_queue<T, std::vector<T>, std::gre
 
 void Main()
 {
-	using namespace debug::print;
-	message(1, 2, 3);
-	message(std::make_tuple(4, 5, 6));
-	message(std::vector{ 7,8,9 });
-	message();
-	message(boost::multi_array<int, 2>(boost::extents[2][3]));
+	
 }
 
 int main()

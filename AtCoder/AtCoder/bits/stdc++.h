@@ -20,3 +20,4 @@
 #include<ctime>
 
 #include"debug_print.hpp"
+#include"random.hpp"

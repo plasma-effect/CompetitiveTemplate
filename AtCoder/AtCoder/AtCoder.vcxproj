@@ -128,6 +128,7 @@
     <ClCompile Include="debug_print.cpp" />
     <ClCompile Include="grobal_object.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="random.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -136,7 +137,9 @@
     <ClInclude Include="bits\stdc++.h" />
     <ClInclude Include="debug_print.hpp" />
     <ClInclude Include="grobal_object.hpp" />
+    <ClInclude Include="random.hpp" />
     <ClInclude Include="type_traits.hpp" />
+    <ClInclude Include="utility.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
