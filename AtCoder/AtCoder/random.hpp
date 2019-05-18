@@ -16,11 +16,10 @@ namespace debug::random
 		{
 			template<class T>class function
 			{
-				T min;
-				T max;
+				std::uniform_int_distribution<T> dist;
 				mutable std::optional<T> opt;
 			public:
-				function(T _min, T _max) :min(_min), max(_max), opt()
+				function(T _min, T _max) :dist(_min, _max), opt()
 				{
 
 				}
@@ -28,14 +27,12 @@ namespace debug::random
 				{
 					if (!opt)
 					{
-						std::uniform_int_distribution<T> dist(min, max);
 						opt = dist(debug::detail::obj.random);
 					}
 					return *opt;
 				}
 				T operator()()const
 				{
-					std::uniform_int_distribution<T> dist(min, max);
 					return dist(debug::detail::obj.random);
 				}
 			};

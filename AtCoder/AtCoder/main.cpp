@@ -9,7 +9,7 @@ template<class T>using p_queue = std::priority_queue<T, std::vector<T>, std::gre
 
 void Main()
 {
-	
+
 }
 
 int main()
