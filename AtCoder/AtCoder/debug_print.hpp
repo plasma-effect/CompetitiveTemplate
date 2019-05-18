@@ -18,6 +18,11 @@ namespace debug::print
 	namespace detail
 	{
 		void write(std::ostream&);
+		struct endl_t
+		{
+
+		};
+		std::ostream& operator<<(std::ostream& os, endl_t const&);
 
 		template<class T>auto ostream_check_i(T const& v)
 			->true_t<decltype(std::declval<std::ostream>() << v)>;
@@ -45,7 +50,7 @@ namespace debug::print
 		template<class T>constexpr bool is_dual_array_v = is_dual_array<T>::value;
 		
 		template<class T, std::size_t... Is>void write_tuple(std::ostream&, T const&, std::index_sequence<Is...>);
-		template<class T>void write_dual_array(std::ostream& os, boost::multi_array<T, 2>const& ar);
+		template<class T, class U>void write_iterate(std::ostream& os, T const& rng, U const& manip);
 
 		template<class T, class... Ts>void write(std::ostream& os, T const& v, Ts const& ... vs)
 		{
@@ -55,31 +60,21 @@ namespace debug::print
 				os << " ";
 				write(os, vs...);
 			}
-			else if constexpr (tuple_check_v<T>)
-			{
-				write_tuple(os, v, std::make_index_sequence<std::tuple_size<T>::value>());
-			}
-			else if constexpr (is_dual_array_v<T>)
-			{
-				write_dual_array(os, v);
-			}
 			else if constexpr (ostream_check_v<T>)
 			{
 				os << v;
 			}
+			else if constexpr (is_dual_array_v<T>)
+			{
+				write_iterate(os, v, endl_t());
+			}
 			else if constexpr (iterator_check_v<T>)
 			{
-				auto ite = std::begin(v);
-				auto end = std::end(v);
-				if (ite != end)
-				{
-					write(os, *ite);
-					for (++ite; ite != end; ++ite)
-					{
-						os << " ";
-						write(os, *ite);
-					}
-				}
+				write_iterate(os, v, " ");
+			}
+			else if constexpr (tuple_check_v<T>)
+			{
+				write_tuple(os, v, std::make_index_sequence<std::tuple_size<T>::value>());
 			}
 			else
 			{
@@ -90,16 +85,16 @@ namespace debug::print
 		{
 			write(os, std::get<Is>(v)...);
 		}
-		template<class T>void write_dual_array(std::ostream& os, boost::multi_array<T, 2>const& ar)
+		template<class T, class U>void write_iterate(std::ostream& os, T const& rng, U const& manip)
 		{
-			auto ite = std::begin(ar);
-			auto end = std::end(ar);
+			auto ite = std::begin(rng);
+			auto end = std::end(rng);
 			if (ite != end)
 			{
 				write(os, *ite);
 				for (++ite; ite != end; ++ite)
 				{
-					os << std::endl;
+					os << manip;
 					write(os, *ite);
 				}
 			}
@@ -118,5 +113,19 @@ namespace debug::print
 	{
 		detail::write(std::cerr, vs...);
 		std::cerr << std::endl;
+	}
+	template<class Range>void write_range(Range const& rng)
+	{
+		for (auto const& v : rng)
+		{
+			write_line(v);
+		}
+	}
+	template<class Range>void message_range(Range const& rng)
+	{
+		for (auto const& v : rng)
+		{
+			message(v);
+		}
 	}
 }

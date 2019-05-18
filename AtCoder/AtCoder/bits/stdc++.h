@@ -19,6 +19,4 @@
 #include<cstdlib>
 #include<ctime>
 
-#if _MSC_FULL_VER
 #include"debug_print.hpp"
-#endif
