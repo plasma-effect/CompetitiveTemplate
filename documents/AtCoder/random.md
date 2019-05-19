@@ -1,13 +1,20 @@
 # random.hpp
 乱数生成関数を提供する。一部の関数は関数オブジェクトとして提供されている。  
 全てnamespace debug::random内に含まれている。
-# 提供している関数オブジェクト
-## constexpr \<type\> next, coin
-「乱数生成をする関数オブジェクト」を返すoperator()を関数メンバとして持つ関数オブジェクト。operator()の返り値の関数オブジェクトは次のような特性を持つ。
+# 提供している関数
+## next(), coin() について
+「乱数生成をする関数オブジェクト」を返す。返り値の関数オブジェクトは次のような特性を持つ。
 - operator()はその場で生成した乱数を返す。
 - 型Tにキャストした時
     - まだ一度もキャストしていない場合乱数を生成しその値を返す。
     - すでに一回以上キャストしている場合前回の値を返す。
+---
+## このヘッダのtemplate関数について
+全てヘッダ内では宣言のみを行い、random.cppで定義して以下の型について明示的なインスタンス化を行っている。したがってテンプレート引数として以下の型以外の型を渡した時そのプログラムはリンクエラーを起こす。
+- std::int32_t
+- std::uint32_t
+- std::int64_t
+- std::uint64_t
 ---
 ## template\<class T\> auto next(T min, T max)
 「min以上max以下の値を返す」乱数生成関数オブジェクトを返す。
@@ -94,7 +101,6 @@ void Main()
 }
 ```
 ---
-# 提供しているtemplate関数
 ## template\<class T\>auto random_vector(std::size_t size, T min, T max)
 各要素がmin以上max以下の数であるサイズがsizeのvectorを返す。
 ### 使用例
