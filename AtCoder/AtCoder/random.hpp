@@ -12,96 +12,56 @@ namespace debug::random
 {
 	namespace detail
 	{
-		struct next_t
+		template<class T>class next_function
 		{
-			template<class T>class function
+			std::uniform_int_distribution<T> dist;
+			mutable std::optional<T> opt;
+		public:
+			next_function(T _min, T _max) :dist(_min, _max), opt()
 			{
-				std::uniform_int_distribution<T> dist;
-				mutable std::optional<T> opt;
-			public:
-				function(T _min, T _max) :dist(_min, _max), opt()
-				{
 
-				}
-				operator T()const
-				{
-					if (!opt)
-					{
-						opt = dist(debug::detail::obj.random);
-					}
-					return *opt;
-				}
-				T operator()()const
-				{
-					return dist(debug::detail::obj.random);
-				}
-			};
-			function<std::int64_t> operator()()const;
-			template<class T>auto operator()(T max)const
-			{
-				return function(T(), max);
 			}
-			template<class T>auto operator()(T min, T max)const
+			operator T()const
 			{
-				return function(min, max);
+				if (!opt)
+				{
+					opt = dist(debug::detail::obj.random);
+				}
+				return *opt;
+			}
+			T operator()()const
+			{
+				return dist(debug::detail::obj.random);
 			}
 		};
-		struct coin_t
+		class coin_function0
 		{
-			class function0
-			{
-				std::size_t deno;
-				std::size_t nume;
-				mutable std::optional<bool> opt;
-			public:
-				function0(std::size_t _d, std::size_t _n);
-				operator bool()const;
-				bool operator()()const;
-			};
-			class function1
-			{
-				std::bernoulli_distribution ber;
-				mutable std::optional<bool> opt;
-			public:
-				function1(double _p);
-				operator bool()const;
-				bool operator()()const;
-			};
-			function0 operator()(std::size_t denominator, std::size_t numerator)const;
-			function1 operator()(double p)const;
+			std::uniform_int_distribution<std::size_t> dist;
+			std::size_t nume;
+			mutable std::optional<bool> opt;
+		public:
+			coin_function0(std::size_t _d, std::size_t _n);
+			operator bool()const;
+			bool operator()()const;
+		};
+		class coin_function1
+		{
+			std::bernoulli_distribution ber;
+			mutable std::optional<bool> opt;
+		public:
+			coin_function1(double _p);
+			operator bool()const;
+			bool operator()()const;
 		};
 	}
-	constexpr detail::next_t next{};
-	constexpr detail::coin_t coin{};
-	template<class T>auto random_vector(std::size_t size, T min, T max)
-	{
-		auto f = next(min, max);
-		std::vector<T> ret(size);
-		for (auto& v : ret)
-		{
-			v = f();
-		}
-		return ret;
-	}
-	template<class T>auto random_vector(std::size_t size, T max)
-	{
-		return random_vector(size, T(), max);
-	}
-	template<class T>auto random_dual_array(std::size_t H, std::size_t W, T min, T max)
-	{
-		auto f = next(min, max);
-		boost::multi_array<T, 2> ret(boost::extents[H][W]);
-		for (auto i : boost::irange(H))
-		{
-			for (auto j : boost::irange(W))
-			{
-				ret[i][j] = f();
-			}
-		}
-		return ret;
-	}
-	template<class T>auto random_dual_array(std::size_t H, std::size_t W, T max)
-	{
-		return random_dual_array(H, W, T(), max);
-	}
+	detail::next_function<std::int64_t> next();
+	template<class T>detail::next_function<T> next(T max);
+	template<class T>detail::next_function<T> next(T min, T max);
+	detail::coin_function0 coin(std::size_t denominator = 2, std::size_t numerator = 1);
+	detail::coin_function1 coin(double p = 0.5);
+
+	template<class T>std::vector<T> random_vector(std::size_t size, T min, T max);
+	template<class T>std::vector<T> random_vector(std::size_t size, T max);
+	template<class T>boost::multi_array<T, 2> random_dual_array(std::size_t H, std::size_t W, T min, T max);
+	template<class T>boost::multi_array<T, 2> random_dual_array(std::size_t H, std::size_t W, T max);
 }

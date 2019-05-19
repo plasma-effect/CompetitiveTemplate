@@ -9,7 +9,16 @@ template<class T>using p_queue = std::priority_queue<T, std::vector<T>, std::gre
 
 void Main()
 {
-
+	using namespace debug::random;
+	auto ar = random_dual_array(3, 3, 5);
+	for (int i : boost::irange(0, 3))
+	{
+		for (int j : boost::irange(0, 3))
+		{
+			std::cout << ar[i][j] << " ";
+		}
+		std::cout << std::endl;
+	}
 }
 
 int main()
