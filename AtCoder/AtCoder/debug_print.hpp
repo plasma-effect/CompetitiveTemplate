@@ -25,17 +25,12 @@ namespace debug::print
 		std::ostream& operator<<(std::ostream& os, endl_t const&);
 
 		template<class T>auto ostream_check_i(T const& v)
-			->true_t<decltype(std::declval<std::ostream>() << v)>;
+			->debug::type_traits::true_t<decltype(std::declval<std::ostream>() << v)>;
 		std::false_type ostream_check_i(...);
 		template<class T>constexpr bool ostream_check_v = decltype(ostream_check_i(std::declval<T>()))::value;
 
-		template<class T>auto iterator_check_i(T const& v)
-			->true_t<decltype((std::begin(v) != std::end(v)), *std::begin(v), ++std::begin(v))>;
-		std::false_type iterator_check_i(...);
-		template<class T>constexpr bool iterator_check_v = decltype(iterator_check_i(std::declval<T>()))::value;
-
 		template<class T>auto tuple_check_i(T const&)
-			->true_t<decltype(std::tuple_size<T>::value)>;
+			->debug::type_traits::true_t<decltype(std::tuple_size<T>::value)>;
 		std::false_type tuple_check_i(...);
 		template<class T>constexpr bool tuple_check_v = decltype(tuple_check_i(std::declval<T>()))::value;
 
@@ -68,7 +63,7 @@ namespace debug::print
 			{
 				write_iterate(os, v, endl_t());
 			}
-			else if constexpr (iterator_check_v<T>)
+			else if constexpr (debug::type_traits::iterator_check_v<T>)
 			{
 				write_iterate(os, v, " ");
 			}

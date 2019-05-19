@@ -22,3 +22,5 @@
 #include"debug_print.hpp"
 #include"random.hpp"
 #include"graph.hpp"
+
+#undef INSTANCE_FOR_FOUR_BASIC_INTEGER

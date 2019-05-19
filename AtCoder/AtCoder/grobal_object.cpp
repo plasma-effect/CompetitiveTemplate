@@ -21,8 +21,8 @@ namespace debug::detail
 	}
 	global_object::global_object() :ofs("./debug.txt", std::ios_base::out | std::ios_base::trunc), random(make_randomizer())
 	{
-		std::cerr << std::fixed << std::setprecision(15);
-		ofs << std::fixed << std::setprecision(15);
+		std::cerr << std::fixed << std::setprecision(15) << std::boolalpha;
+		ofs << std::fixed << std::setprecision(15) << std::boolalpha;
 	}
 	global_object obj{};
 }

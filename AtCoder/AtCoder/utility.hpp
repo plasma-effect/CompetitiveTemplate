@@ -5,6 +5,7 @@
 #include<set>
 #include<map>
 #include<vector>
+#include"type_traits.hpp"
 
 namespace debug::utility
 {
@@ -86,4 +87,28 @@ namespace debug::utility
 			return dsize;
 		}
 	};
+	template<class T>std::vector<T> indexed_vector(std::size_t size)
+	{
+		std::vector<T> vec(size);
+		T val{};
+		for (auto& v : vec)
+		{
+			v = val;
+			++val;
+		}
+		return vec;
+	}
+	void test();
+	template<class T>auto constant(T val)
+	{
+		return [val]
+		{
+			return val;
+		};
+	}
 }
+#define INSTANCE_FOR_FOUR_BASIC_INTEGER(macro)\
+macro(std::int32_t);\
+macro(std::uint32_t);\
+macro(std::int64_t);\
+macro(std::uint64_t)

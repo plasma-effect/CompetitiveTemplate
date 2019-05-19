@@ -1,7 +1,6 @@
 //This source code is under the MIT License, see LICENSE.txt.
 #pragma once
 #include"grobal_object.hpp"
-#include"utility.hpp"
 #include<cstdint>
 #include<vector>
 #include<optional>
@@ -57,7 +56,7 @@ namespace debug::random
 	detail::next_function<std::int64_t> next();
 	template<class T>detail::next_function<T> next(T max);
 	template<class T>detail::next_function<T> next(T min, T max);
-	detail::coin_function0 coin(std::size_t denominator = 2, std::size_t numerator = 1);
+	detail::coin_function0 coin(std::size_t denominator, std::size_t numerator);
 	detail::coin_function1 coin(double p = 0.5);
 
 	template<class T>std::vector<T> random_vector(std::size_t size, T min, T max);

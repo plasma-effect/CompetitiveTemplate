@@ -84,7 +84,7 @@ void Main()
 }
 ```
 ---
-## auto coin(double p)
+## auto coin(double p = 0.5)
 「確率pでtrue、それ以外の場合falseを返す」乱数生成関数オブジェクトを返す。
 ### 使用例
 ```cpp
@@ -114,8 +114,6 @@ void Main()
 		std::cout << v << std::endl;
 	}
 }
-```cpp
-
 ```
 ---
 ## template\<class T\>auto random_vector(std::size_t size, T max)
