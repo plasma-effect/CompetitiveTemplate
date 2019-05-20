@@ -104,13 +104,9 @@ namespace debug::graph
 		os << N << " " << E << std::endl;
 		for (auto i : boost::irange(N))
 		{
-			for (auto e : edge[i])
+			for (auto ite = edge[i].lower_bound(i); ite != std::cend(edge[i]); ++ite)
 			{
-				if (i < e)
-				{
-					break;
-				}
-				os << e + 1 << " " << i + 1 << std::endl;
+				os << i + 1 << " " << (*ite) + 1 << std::endl;
 			}
 		}
 	}

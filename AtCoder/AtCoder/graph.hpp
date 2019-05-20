@@ -25,13 +25,10 @@ namespace debug::graph
 		os << N << " " << E << std::endl;
 		for (auto i : boost::irange(N))
 		{
-			for (auto const& [e, v] : edge[i])
+			for (auto ite = edge[i].lower_bound(i); ite != std::cend(edge[i]); ++ite)
 			{
-				if (i < e)
-				{
-					break;
-				}
-				debug::print::detail::write(os, e + 1, i + 1, v);
+				auto const& [e, v] = *ite;
+				debug::print::detail::write(os, i + 1, e + 1, v);
 				os << std::endl;
 			}
 		}
