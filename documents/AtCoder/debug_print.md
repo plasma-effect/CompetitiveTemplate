@@ -2,8 +2,8 @@
 printfデバッグ用の出力関数を提供する。  
 全てnamespace debug::print内に含まれている。
 # 提供している関数
-writeとある関数は./debugに出力される。  
-messageとある関数とある関数は標準エラー出力に出力される。
+writeとある関数は./debug.txtに出力される。  
+messageとある関数は標準エラー出力に出力される。
 ## template\<class... Ts\>void write(Ts const& ... vs)
 sizeof...(Ts)が0でない場合、空白区切りで一行に出力される。  
 sizeof...(Ts)が0である場合、何も行われない。
