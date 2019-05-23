@@ -39,8 +39,8 @@ namespace Codeforces
                     Write(" ");
                     builder.Append(ite.Current);
                 }
-                builder.AppendLine();
             }
+            builder.AppendLine();
         }
         public static void WriteLine<T>(T[,] ts)
         {
@@ -86,7 +86,7 @@ namespace Codeforces
     {
         static void Main(string[] args)
         {
-            WriteLine(ReadArray(int.Parse));
+
         }
     }
 }
