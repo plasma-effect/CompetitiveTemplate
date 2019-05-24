@@ -33,6 +33,20 @@ namespace Codeforces.Debug
             return random.Next(minValue, maxValue + 1);
         }
         /// <summary>
+        /// Return random boolean(True probability is numerator/denominator)
+        /// </summary>
+        /// <param name="denominator">Denominator</param>
+        /// <param name="numerator">Numerator</param>
+        /// <returns>True or False(Random)</returns>
+        public static bool Coin(int denominator = 2, int numerator = 1)
+        {
+            if (denominator < 1)
+            {
+                throw new System.ArgumentException("denominator must not be less than 1");
+            }
+            return random.Next(denominator) < numerator;
+        }
+        /// <summary>
         /// Make array that is made by random numbers in [minValue, maxValue](include maxValue)
         /// </summary>
         /// <param name="length">Array Length</param>

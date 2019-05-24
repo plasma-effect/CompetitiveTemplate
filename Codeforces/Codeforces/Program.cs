@@ -21,13 +21,6 @@ namespace Codeforces
         {
             builder.Append(obj);
         }
-        static IEnumerable<T> Iterate<T>(T[,] ts, int i, int s)
-        {
-            foreach (var j in Range(0, s))
-            {
-                yield return ts[i, j];
-            }
-        }
         public static void WriteLine<T>(IEnumerable<T> ts)
         {
             var ite = ts.GetEnumerator();
@@ -37,7 +30,7 @@ namespace Codeforces
                 while (ite.MoveNext())
                 {
                     Write(" ");
-                    builder.Append(ite.Current);
+                    Write(ite.Current);
                 }
             }
             builder.AppendLine();
@@ -47,8 +40,12 @@ namespace Codeforces
             var (s0, s1) = (ts.GetLength(0), ts.GetLength(1));
             foreach (var i in Range(0, s0))
             {
-                WriteLine(Iterate(ts, i, s1));
+                WriteLine(Range(0, s1).Select(j => ts[i, j]));
             }
+        }
+        public static void WriteLine(string str)
+        {
+            builder.AppendLine(str);
         }
         public static void WriteLine(object v)
         {
@@ -86,7 +83,7 @@ namespace Codeforces
     {
         static void Main(string[] args)
         {
-
+            WriteLine("Test");
         }
     }
 }

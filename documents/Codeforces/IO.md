@@ -42,6 +42,16 @@ static void Main(string[] args)
 }
 ```
 ---
+## public static void WriteLine(string str)
+strを出力し、改行する。
+### 使用例
+```csharp
+static void Main(string[] args)
+{
+    WriteLine("Test");
+}
+```
+---
 ## public static void WriteLine(object v)
 vを出力し、改行する。
 ### 使用例

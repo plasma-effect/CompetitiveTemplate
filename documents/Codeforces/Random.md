@@ -32,6 +32,16 @@ static void Main(string[] args)
 }
 ```
 ---
+## public static bool Coin(int denominator, int numerator)
+numerator/denominatorの確率でtrue、そうでないときfalseを返す。
+### 使用例
+```csharp
+static void Main(string[] args)
+{
+    WriteLine(Debug.Random.Coin(3, 2));
+}
+```
+---
 ## public static int[] RandomArray(int length, int minValue, int maxValue)
 minValue以上maxValue以下のランダムな数で構成された、長さlengthのint型配列を返す。
 ### 使用例
