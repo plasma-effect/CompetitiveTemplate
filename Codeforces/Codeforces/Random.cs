@@ -30,7 +30,7 @@ namespace Codeforces.Debug
         /// <returns>random number(in [minValue, maxValue])</returns>
         public static int Next(int minValue, int maxValue)
         {
-            return random.Next(minValue, maxValue);
+            return random.Next(minValue, maxValue + 1);
         }
         /// <summary>
         /// Make array that is made by random numbers in [minValue, maxValue](include maxValue)
