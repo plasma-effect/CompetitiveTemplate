@@ -5,29 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Linq.Enumerable;
+using static Codeforces.Debug.Detail.Utility;
 
 namespace Codeforces.Debug
 {
     static class GraphTraits
     {
-        static SortedSet<int>[] MakeDefaultGraph(int size)
-        {
-            var ret = new SortedSet<int>[size];
-            foreach (var i in Range(0, size))
-            {
-                ret[i] = new SortedSet<int>();
-            }
-            return ret;
-        }
-        static SortedDictionary<int, T>[] MakeDefaultWeightedGraph<T>(int size)
-        {
-            var ret = new SortedDictionary<int, T>[size];
-            foreach (var i in Range(0, size))
-            {
-                ret[i] = new SortedDictionary<int, T>();
-            }
-            return ret;
-        }
         class RandomChecker
         {
             int[] tree;
@@ -90,7 +73,7 @@ namespace Codeforces.Debug
         }
         static SortedDictionary<int, T>[] TransformWeighted<T>(SortedSet<int>[] graph, Func<T> func)
         {
-            var ret = MakeDefaultWeightedGraph<T>(graph.Length);
+            var ret = MakeArray<SortedDictionary<int, T>>(graph.Length);
             foreach (var i in Range(0, graph.Length))
             {
                 foreach (var e in graph[i])
@@ -165,7 +148,7 @@ namespace Codeforces.Debug
                 {
                     throw new ArgumentException("it is impossible to make size 0 graph");
                 }
-                this.graph = MakeDefaultGraph(size);
+                this.graph = MakeArray<SortedSet<int>>(size);
                 this.size = size;
                 this.checker = new RandomChecker(size);
                 this.maxDegree = maxDegree;
