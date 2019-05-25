@@ -83,7 +83,7 @@ namespace Codeforces
     {
         static void Main(string[] args)
         {
-            WriteLine("Test");
+
         }
     }
 }

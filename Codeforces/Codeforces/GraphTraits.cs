@@ -104,7 +104,12 @@ namespace Codeforces.Debug
             }
             return ret;
         }
-        public static string GraphToString(SortedSet<int>[] graph)
+        /// <summary>
+        /// Graph to String (Competitive Input Style)
+        /// </summary>
+        /// <param name="graph">Graph to output</param>
+        /// <returns>Graph Data</returns>
+        public static string GraphString(SortedSet<int>[] graph)
         {
             var builder = new StringBuilder();
             var edge = 0;
@@ -118,6 +123,32 @@ namespace Codeforces.Debug
                 }
             }
             builder.Replace("{0}", graph.Length.ToString());
+            builder.Replace("{1}", edge.ToString());
+            return builder.ToString();
+        }
+        /// <summary>
+        /// Graph to String (Competitive Input Style)
+        /// </summary>
+        /// <typeparam name="T">Weight Type</typeparam>
+        /// <param name="graph">Graph to output</param>
+        /// <returns>Graph Data</returns>
+        public static string GraphString<T>(SortedDictionary<int, T>[] graph)
+        {
+            var builder = new StringBuilder();
+            var size = graph.Length;
+            var edge = 0;
+            builder.AppendLine("{0} {1}");
+            foreach(var i in Range(0, size))
+            {
+                foreach(var p in graph[i].SkipWhile(p => p.Key < i))
+                {
+                    var j = p.Key;
+                    var v = p.Value;
+                    builder.AppendLine($"{i + 1} {j + 1} {v}");
+                    ++edge;
+                }
+            }
+            builder.Replace("{0}", size.ToString());
             builder.Replace("{1}", edge.ToString());
             return builder.ToString();
         }
@@ -200,24 +231,89 @@ namespace Codeforces.Debug
                     {
                         a = this.checker.RandomGet();
                         b = this.checker.RandomGet();
-                    } while (a != b);
+                    } while (a == b || this.graph[a].Contains(b));
                     Connect(a, b);
                 }
             }
 
             public SortedSet<int>[] Graph => this.graph;
         }
-        public static SortedSet<int>[] RandomTree(int size, int maxDegree = int.MaxValue)
+        /// <summary>
+        /// Make Random Tree with N vertexes
+        /// </summary>
+        /// <param name="N">Vertex Count</param>
+        /// <param name="maxDegree">Max Degree</param>
+        /// <returns>Tree with N vertexes</returns>
+        public static SortedSet<int>[] RandomTree(int N, int maxDegree = int.MaxValue)
         {
-            var maker = new GraphMaker(size, Math.Min(size - 1, maxDegree));
+            var maker = new GraphMaker(N, Math.Min(N - 1, maxDegree));
             maker.MakeTree();
             return maker.Graph;
         }
-        public static SortedSet<int>[] RandomGraph(int vertex, int edge, int maxDegree = int.MaxValue)
+        /// <summary>
+        /// Make Random Weighted Tree with N vertexes
+        /// </summary>
+        /// <param name="N">Vertex Count</param>
+        /// <param name="minValue">Min Value</param>
+        /// <param name="maxValue">Max Value</param>
+        /// <param name="maxDegree">Max Degree</param>
+        /// <returns>Weighted Tree with N vertexes</returns>
+        public static SortedDictionary<int, int>[] RandomWeightedTree(int N, int minValue, int maxValue, int maxDegree = int.MaxValue)
         {
-            var maker = new GraphMaker(vertex, Math.Min(vertex - 1, maxDegree));
-            maker.MakeGraph(edge);
+            return TransformWeighted(RandomTree(N, maxDegree), () => Random.Next(minValue, maxValue));
+        }
+        /// <summary>
+        /// Make Random Weighted Tree with N vertexes
+        /// </summary>
+        /// <param name="N">Vertex Count</param>
+        /// <param name="minValue">Min Value</param>
+        /// <param name="maxValue">Max Value</param>
+        /// <param name="maxDegree">Max Degree</param>
+        /// <returns>Weighted Tree with N vertexes</returns>
+        public static SortedDictionary<int, long>[] RandomWeightedTree(int N, long minValue, long maxValue, int maxDegree = int.MaxValue)
+        {
+            return TransformWeighted(RandomTree(N, maxDegree), () => (long)Random.Next((int)minValue, (int)maxValue));
+        }
+        /// <summary>
+        /// Make Random Connected Graph with N vertexes and E edges
+        /// </summary>
+        /// <param name="N">Vertex Count</param>
+        /// <param name="E">Edge Count</param>
+        /// <param name="maxDegree">Max Degree</param>
+        /// <returns>Connected Graph with N vertexes and E edges</returns>
+        public static SortedSet<int>[] RandomGraph(int N, int E, int maxDegree = int.MaxValue)
+        {
+            var maker = new GraphMaker(N, Math.Min(N - 1, maxDegree));
+            E = Math.Max(E, N - 1);
+            maker.MakeGraph(E);
             return maker.Graph;
         }
+        /// <summary>
+        /// Make Random Weighted Connected Graph with N vertexes and E edges
+        /// </summary>
+        /// <param name="N">Vertex Count</param>
+        /// <param name="E">Edge Count</param>
+        /// <param name="minValue">Min Value</param>
+        /// <param name="maxValue">Max Value</param>
+        /// <param name="maxDegree">Max Degree</param>
+        /// <returns>Weighted Connected Graph with N vertexes and E edges</returns>
+        public static SortedDictionary<int, int>[] RandomWeightedGraph(int N, int E, int minValue, int maxValue, int maxDegree = int.MaxValue)
+        {
+            return TransformWeighted(RandomGraph(N, E, maxDegree), () => Random.Next(minValue, maxValue));
+        }
+        /// <summary>
+        /// Make Random Weighted Connected Graph with N vertexes and E edges
+        /// </summary>
+        /// <param name="N">Vertex Count</param>
+        /// <param name="E">Edge Count</param>
+        /// <param name="minValue">Min Value</param>
+        /// <param name="maxValue">Max Value</param>
+        /// <param name="maxDegree">Max Degree</param>
+        /// <returns>Weighted Connected Graph with N vertexes and E edges</returns>
+        public static SortedDictionary<int, long>[] RandomWeightedGraph(int N, int E, long minValue, long maxValue, int maxDegree = int.MaxValue)
+        {
+            return TransformWeighted(RandomGraph(N, E, maxDegree), () => (long)Random.Next((int)minValue, (int)maxValue));
+        }
+
     }
 }

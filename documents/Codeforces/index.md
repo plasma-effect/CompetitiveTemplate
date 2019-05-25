@@ -8,3 +8,5 @@
 printfデバッグ用の出力関数を提供する。
 # [static class Message](./Message.md)
 標準エラー出力利用補助の関数を提供する。
+# [static class GraphTraits](./GraphTraits.md)
+無向グラフの文字列化及びランダム生成関数を提供する。
