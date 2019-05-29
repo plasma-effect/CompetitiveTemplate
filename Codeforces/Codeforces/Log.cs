@@ -45,14 +45,16 @@ namespace Codeforces.Debug
         /// <param name="ts">Enumerable Object to write</param>
         public static void WriteLine<T>(IEnumerable<T> ts)
         {
-            var ite = ts.GetEnumerator();
-            if (ite.MoveNext())
+            using (var ite = ts.GetEnumerator())
             {
-                Write(ite.Current);
-                while (ite.MoveNext())
+                if (ite.MoveNext())
                 {
-                    Write(" ");
                     Write(ite.Current);
+                    while (ite.MoveNext())
+                    {
+                        Write(" ");
+                        Write(ite.Current);
+                    }
                 }
             }
             WriteLine();
