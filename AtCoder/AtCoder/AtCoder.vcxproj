@@ -130,7 +130,6 @@
     <ClCompile Include="grobal_object.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="random.cpp" />
-    <ClCompile Include="utility.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

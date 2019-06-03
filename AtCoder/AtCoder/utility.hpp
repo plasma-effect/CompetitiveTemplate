@@ -98,8 +98,7 @@ namespace debug::utility
 		}
 		return vec;
 	}
-	void test();
-	template<class T>auto constant(T val)
+	template<class T>constexpr auto constant(T val)
 	{
 		return [val]
 		{
