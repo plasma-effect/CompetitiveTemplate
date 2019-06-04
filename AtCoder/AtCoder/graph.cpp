@@ -8,35 +8,21 @@ using namespace debug::utility;
 
 namespace debug::graph
 {
-	bool is_connect(graph_t const& graph, std::size_t from, std::size_t to)
+	bool is_connect(inside_type::graph_t const& graph, std::size_t from, std::size_t to)
 	{
 		return graph[from].count(to);
 	}
-	boost::optional<std::size_t> distance(graph_t const& graph, std::size_t from, std::size_t to)
-	{
-		if (graph[from].count(to))
-		{
-			return 1;
-		}
-		else
-		{
-			boost::none;
-		}
-	}
-	void connect(graph_t& graph, std::size_t from, std::size_t to, std::size_t d)
+	void connect(inside_type::graph_t& graph, std::size_t from, std::size_t to, std::size_t d)
 	{
 		graph[from].insert(to);
 		graph[to].insert(from);
 	}
-	void directed_connect(graph_t& graph, std::size_t from, std::size_t to, std::size_t d)
-	{
-		graph[from].insert(to);
-	}
-	std::size_t degree(graph_t const& graph, std::size_t i)
+	std::size_t degree(inside_type::graph_t const& graph, std::size_t i)
 	{
 		return graph[i].size();
 	}
-	auto get_edges(graph_t const& graph, std::size_t i) -> decltype(graph[i] | boost::adaptors::transformed(detail::trans))
+	auto get_edges(inside_type::graph_t const& graph, std::size_t i)
+		-> decltype(graph[i] | boost::adaptors::transformed(detail::trans))const&
 	{
 		return graph[i] | boost::adaptors::transformed(detail::trans);
 	}

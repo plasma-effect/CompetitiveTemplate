@@ -5,6 +5,7 @@
 #include<map>
 #include<boost/optional.hpp>
 #include<boost/range/adaptor/transformed.hpp>
+#include<boost/range/irange.hpp>
 #include"utility.hpp"
 #include"random.hpp"
 #include"grobal_object.hpp"
@@ -12,56 +13,39 @@
 
 namespace debug::graph
 {
-	using graph_t = std::vector<std::set<std::size_t>>;
-	template<class T>using weighted_graph_t = std::vector<std::map<std::size_t, T>>;
-
+	namespace inside_type
+	{
+		using graph_t = std::vector<std::set<std::size_t>>;
+		template<class T>using weighted_graph_t = std::vector<std::map<std::size_t, T>>;
+	}
 	template<class T>struct graph_traits
 	{
 		using value_type = typename T::value_type;
 	};
-	template<>struct graph_traits<graph_t>
+	template<>struct graph_traits<inside_type::graph_t>
 	{
 		using value_type = std::size_t;
 	};
-	template<class T>struct graph_traits<weighted_graph_t<T>>
+	template<class T>struct graph_traits<inside_type::weighted_graph_t<T>>
 	{
 		using value_type = T;
 	};
 	template<class T>using graph_value_t = typename graph_traits<T>::value_type;
 
-	bool is_connect(graph_t const& graph, std::size_t from, std::size_t to);
-	template<class T>bool is_connect(weighted_graph_t<T> const& graph, std::size_t from, std::size_t to)
+	bool is_connect(inside_type::graph_t const& graph, std::size_t from, std::size_t to);
+	template<class T>bool is_connect(inside_type::weighted_graph_t<T> const& graph, std::size_t from, std::size_t to)
 	{
 		return graph[from].count(to);
 	}
 
-	boost::optional<std::size_t> distance(graph_t const& graph, std::size_t from, std::size_t to);
-	template<class T> boost::optional<T> distance(weighted_graph_t<T>const& graph, std::size_t from, std::size_t to)
-	{
-		if (graph[from].count(to))
-		{
-			return graph[from].at(to);
-		}
-		else
-		{
-			return boost::none;
-		}
-	}
-
-	void connect(graph_t& graph, std::size_t from, std::size_t to, std::size_t d);
-	template<class T>void connect(weighted_graph_t<T>& graph, std::size_t from, std::size_t to, T const& d)
+	void connect(inside_type::graph_t& graph, std::size_t from, std::size_t to, std::size_t d);
+	template<class T>void connect(inside_type::weighted_graph_t<T>& graph, std::size_t from, std::size_t to, T const& d)
 	{
 		graph[from][to] = graph[to][from] = d;
 	}
 
-	void directed_connect(graph_t& graph, std::size_t from, std::size_t to, std::size_t d);
-	template<class T>void directed_connect(graph_t& graph, std::size_t from, std::size_t to, T const& d)
-	{
-		graph[from][to] = d;
-	}
-
-	std::size_t degree(graph_t const& graph, std::size_t i);
-	template<class T>std::size_t degree(weighted_graph_t<T>const& graph, std::size_t i)
+	std::size_t degree(inside_type::graph_t const& graph, std::size_t i);
+	template<class T>std::size_t degree(inside_type::weighted_graph_t<T>const& graph, std::size_t i)
 	{
 		return graph[i].size();
 	}
@@ -70,9 +54,9 @@ namespace debug::graph
 	{
 		std::pair<std::size_t, std::size_t> trans(std::size_t i);
 	}
-	auto get_edges(graph_t const& graph, std::size_t i)
-		->decltype(graph[i] | boost::adaptors::transformed(detail::trans));
-	template<class T>decltype(auto) get_edges(weighted_graph_t<T> const& graph, std::size_t i)
+	auto get_edges(inside_type::graph_t const& graph, std::size_t i)
+		->decltype(graph[i] | boost::adaptors::transformed(detail::trans))const&;
+	template<class T>decltype(auto) get_edges(inside_type::weighted_graph_t<T> const& graph, std::size_t i)
 	{
 		return graph[i];
 	}
@@ -172,7 +156,10 @@ namespace debug::graph
 				edges(),
 				checker(_vertexes)
 			{
-
+				if (_vertexes == 0)
+				{
+					throw std::invalid_argument(R"(it is impossible to make "0 size graph")");
+				}
 			}
 
 			void connect_check()
@@ -257,14 +244,14 @@ namespace debug::graph
 		maker.make_graph(utility::constant(value_type(1)), edges);
 		return maker.get();
 	}
-	template<class Graph>auto make_weighted_random_tree(std::size_t vertexes, graph_value_t<Graph>const& min, graph_value_t<Graph> const& max, std::size_t max_degree = utility::max_value<std::size_t>)
+	template<class Graph>auto make_random_weighted_tree(std::size_t vertexes, graph_value_t<Graph>const& min, graph_value_t<Graph> const& max, std::size_t max_degree = utility::max_value<std::size_t>)
 	{
 		max_degree = std::min(vertexes - 1, max_degree);
 		detail::graph_maker<Graph> maker(vertexes, max_degree);
 		maker.make_tree(random::next(min, max));
 		return maker.get();
 	}
-	template<class Graph>auto make_weighted_random_graph(std::size_t vertexes, std::size_t edges, graph_value_t<Graph>const& min, graph_value_t<Graph> const& max, std::size_t max_degree = utility::max_value<std::size_t>)
+	template<class Graph>auto make_random_weighted_graph(std::size_t vertexes, std::size_t edges, graph_value_t<Graph>const& min, graph_value_t<Graph> const& max, std::size_t max_degree = utility::max_value<std::size_t>)
 	{
 		max_degree = std::min(vertexes - 1, max_degree);
 		detail::graph_maker<Graph> maker(vertexes, max_degree);
